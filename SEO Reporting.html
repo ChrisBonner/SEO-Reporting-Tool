@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Client Report Generator</title>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		
+		<!-- Custom CSS -->
+		<link rel="stylesheet" href="css/custom.css">
+		<!-- Javascript func.js and dependency lodash.js -->
+		<script type="text/javascript" src="js/func.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+
+	</head>
+	<body onload="init();">
+		<div class="container">
+			<div class="row">
+				<div class="col text-center">
+					<h1>SEO Report Generation Tool</h1>
+				</div>
+			</div>
+			<hr />
+			<div class="row justify-content-md-center selectbar">
+				<div class="col">
+					<div class="row justify-content-md-center">
+						<div class="col">
+							<div class="row justify-content-md-center">
+								<div class="col text-center">
+								      	<input type="button" class="btn btn-primary" name="inputSEOData" id="inputSEOData" value="Input SEO Data">
+								      	<input type="button" class="btn btn-primary" name="inputAdWordsData" id="inputAdWordsData" value="Input AdWords Data">
+								      	<input type="button" class="btn btn-primary" name="inputBlogData" id="inputBlogData" value="Input Blog Data">
+								      	<input type="button" class="btn btn-primary" name="processData" id="processData" value="Process Data">
+								      	<input type="button" class="btn btn-danger" name="clearDataCache" id="clearDataCache" value="Clear Data Cache">
+								</div>
+							</div>
+							<div class="row justify-content-md-end">
+								<div class="col-6 ptop">
+									<select name="clients" id="clients" class="btn dropdown-toggle">
+										<option value="" disabled selected>Load Client Data:</option>
+									</select>
+								</div>
+								<div class="col-5 ptop">
+									<input type="button" class="btn btn-primary" name="prev" id="prevClient" value="<< Previous Client">
+									<input type="button" class="btn btn-primary" name="next" id="nextClient" value="Next Client >>">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col text-center">
+							<input type="button" class="btn btn-primary" name="workPerformed" id="workPerformed" value="Add Work Performed">
+							<input type="button" class="btn btn-primary" name="setPerformanceOptions" id="setPerformanceOptions" value="Add Performance Notes">
+							<input type="button" class="btn btn-primary" name="setPPCOptions" id="setPPCOptions" value="Add PPC Notes">
+							<input type="button" class="btn btn-primary" name="setServiceOptions" id="setServiceOptions" value="Add Services &amp; Other Notes">
+						</div>		
+					</div>
+				</div>
+			</div>
+			<div id="debug" class="row">
+				<div class="col debug">
+					<h3 class="center">Debugging Tools</h3>
+					<div class="row">
+						<div class="col-2">
+						</div>
+						<div class="col-5 text-center">
+							<h2>Export Data</h2>
+						</div>
+						<div class="col-5 text-center">
+							<h2>Import Data</h2>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-2 text-center">
+							<input type="button" class="btn btn-info" name="CheckData" id="CheckDataBtn" value="Check Data">
+							<input type="button" class="btn btn-info" name="ExportData" id="ExportDataBtn" value="Export Data">
+							<input type="button" class="btn btn-info" name="ImportData" id="ImportDataBtn" value="Import Data">
+							<input type="button" class="btn btn-info" name="RevertDataBtn" id="RevertDataBtn" value="Revert Data">
+						</div>
+						<div class="col-5 text-right">
+							<textarea class="form-control" style="min-height: 250px;" id="ExportData"></textarea>
+						</div>
+						<div class="col-5 text-right">
+							<textarea class="form-control" style="min-height: 250px;" id="ImportData"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="inputSEO">
+				<form>
+					<h3 style="text-align:center;">Paste in SEO Monthly Data from WeoSys</h3>
+					<div class="row">
+						<div class="col">
+							<textarea class="form-control" style="min-height: 500px;" id="userSEOData" placeholder="Paste in SEO Month Dataly from WeoSys"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="inputAdWords">
+				<form>
+					<h3 style="text-align:center;">Paste in AdWords Monthly Data from WeoSys</h3>
+					<div class="row">
+						<div class="col">
+							<textarea class="form-control" style="min-height: 500px;" id="userAdWordsData" placeholder="Paste in AdWords Month Dataly from WeoSys"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="inputBlog">
+				<form>
+					<h3 style="text-align:center;">Paste in Blog Monthly Data from WeoSys</h3>
+					<div class="row">
+						<div class="col">
+							<textarea class="form-control" style="min-height: 500px;" id="userBlogData" placeholder="Paste in Blog Monthly Data from WeoSys"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="work">
+				<form id="workForm">
+					<div id="workFields">
+						<h3 id="workH3" class="center">Performed Work</h3>
+						<div class="row text-right ptop" id="workRow">
+							<div class="col" id="workCol">
+								<input type="submit" class="btn btn-danger pull-left nomar" name="clearWorkCache" id="clearWorkCache" value="Clear All Performed Work Cache">
+								<input type="button" class="btn btn-primary" name="workPerformedField" id="workPerformedField" value="Add New Work Performed Field">
+							</div>
+						</div>
+					</div>
+					<hr />
+					<div class="row justify-content-md-center ptop">
+						<div class="col-11">
+							<h3 style="text-align:center;">Work Message Options</h3>
+							<div class="row ptop">
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="schema" class="form-check-input" type="checkbox" value="">
+											Schema
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="localbusinessschema" class="form-check-input" type="checkbox" value="">
+											Dentist Schema
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="reviews" class="form-check-input" type="checkbox" value="">
+											Reviews
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="aggregatereviewschema" class="form-check-input" type="checkbox" value="">
+											Aggr Review Schema
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="yelp" class="form-check-input" type="checkbox" value="">
+											Yelp
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="richcard" class="form-check-input" type="checkbox" value="">
+											Rich Card
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="internallinking" class="form-check-input" type="checkbox" value="">
+											Internal Linking
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="redirects" class="form-check-input" type="checkbox" value="">
+											301 Redirect
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="brokenlinks" class="form-check-input" type="checkbox" value="">
+											Broken Links
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="keywordphrases" class="form-check-input" type="checkbox" value="">
+											Keyword Phrases
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="keyworddensity" class="form-check-input" type="checkbox" value="">
+											Keyword Density
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="competitiveanalysis" class="form-check-input" type="checkbox" value="">
+											Competitive Analysis
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="competitiveseokeyphrases" class="form-check-input" type="checkbox" value="">
+											Competitive Keyphrases
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="blogs" class="form-check-input" type="checkbox" value="">
+											Blogs
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="content" class="form-check-input" type="checkbox" value="">
+											Content
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="freshcontent" class="form-check-input" type="checkbox" value="">
+											Fresh Content
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="cononical" class="form-check-input" type="checkbox" value="">
+											Cononical
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="indexing" class="form-check-input" type="checkbox" value="">
+											Indexing
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="alttext" class="form-check-input" type="checkbox" value="">
+											Alt Text
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="titletags" class="form-check-input" type="checkbox" value="">
+											Title Tags
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="metadescription" class="form-check-input" type="checkbox" value="">
+											Meta Description
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="metakeywords" class="form-check-input" type="checkbox" value="">
+											Meta Keywords
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="htags" class="form-check-input" type="checkbox" value="">
+											H Tags
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="bing" class="form-check-input" type="checkbox" value="">
+											Bing
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="googlebusiness" class="form-check-input" type="checkbox" value="">
+											Google Business
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="dataaggregators" class="form-check-input" type="checkbox" value="">
+											Data Aggregators
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="directorycompletion" class="form-check-input" type="checkbox" value="">
+											Directory Completion
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="duplicatelisting" class="form-check-input" type="checkbox" value="">
+											Duplicate Listing
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="gmbappointmenturl" class="form-check-input" type="checkbox" value="">
+											GMB Appointment URL
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="gmbservicesurl" class="form-check-input" type="checkbox" value="">
+											GMB Services URL
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="gmbpost" class="form-check-input" type="checkbox" value="">
+											GMB Post
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="videoseo" class="form-check-input" type="checkbox" value="">
+											Video SEO
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="robotstxt" class="form-check-input" type="checkbox" value="">
+											Robots.txt
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="sitemap" class="form-check-input" type="checkbox" value="">
+											Sitemap
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="pageloadingtime" class="form-check-input" type="checkbox" value="">
+											Page Loading Time
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="phonetracking" class="form-check-input" type="checkbox" value="">
+											Phone Tracking
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="wordpressupdate" class="form-check-input" type="checkbox" value="">
+											WordPress Update
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="updateplugins" class="form-check-input" type="checkbox" value="">
+											Update Plugins
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="workadditionalnotes" class="form-check-input" type="checkbox" value="">
+											Additional Notes
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col text-center">
+							<input type="submit" class="btn btn-danger pull-left nomar" name="clearCheckedOptionalCache" id="clearCheckedOptionalCache" value="Clear Checked Options Cache">
+							<input type="submit" class="btn btn-danger" name="clearAllOptionalCache" id="clearAllOptionalCache" value="Clear All Options Cache">
+							<input type="button" class="btn btn-primary pull-right" name="setWorkOptions" id="setWorkOptions" value="Set Work Message Options Text">
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="workOptions">
+				<form>
+					<h3 style="text-align:center;">Set Work Message Options Text</h3>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Schema</h5>
+							<textarea class="form-control" id="SchemaNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Dentist Schema</h5>
+							<textarea class="form-control" id="DentistSchemaNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Reviews</h5>
+							<textarea class="form-control" id="ReviewsNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Aggregate Review Schema</h5>
+							<textarea class="form-control" id="AggrReviewSchemaNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Yelp</h5>
+							<textarea class="form-control" id="YelpNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Rich Cards</h5>
+							<textarea class="form-control" id="RichCardsNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Internal Linking</h5>
+							<textarea class="form-control" id="InternalLinkingNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>301 Redirects</h5>
+							<textarea class="form-control" id="301RedirectsNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Broken Links</h5>
+							<textarea class="form-control" id="BrokenLinksNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Keyword Phrases</h5>
+							<textarea class="form-control" id="KeywordPhrasesNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Keyword Density</h5>
+							<textarea class="form-control" id="KeywordDensityNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Competitive Analysis</h5>
+							<textarea class="form-control" id="CompetitiveAnalysisNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Competitive SEO Keyphrases</h5>
+							<textarea class="form-control" id="CompetitiveSEOKeyphrasesNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Blogs</h5>
+							<textarea class="form-control" id="BlogsNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Content</h5>
+							<textarea class="form-control" id="ContentNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Fresh Content</h5>
+							<textarea class="form-control" id="FreshContentNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Cononical</h5>
+							<textarea class="form-control" id="CononicalNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Indexing</h5>
+							<textarea class="form-control" id="IndexingNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Alt Text</h5>
+							<textarea class="form-control" id="AltTextNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Title Tags</h5>
+							<textarea class="form-control" id="TitleTagsNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Meta Description</h5>
+							<textarea class="form-control" id="MetaDescriptionNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Meta Keywords</h5>
+							<textarea class="form-control" id="MetaKeywordsNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>H Tags</h5>
+							<textarea class="form-control" id="HTagsNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Bing</h5>
+							<textarea class="form-control" id="BingNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Google My Business</h5>
+							<textarea class="form-control" id="GMBNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Data Aggregators</h5>
+							<textarea class="form-control" id="DataAggregatorsNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Directory Completion</h5>
+							<textarea class="form-control" id="DirectoryCompletionNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Duplicate Listing</h5>
+							<textarea class="form-control" id="DuplicateListingNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>GMB Appointment URL</h5>
+							<textarea class="form-control" id="GMBAppointmentURLNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>GMB Services URL</h5>
+							<textarea class="form-control" id="GMBServicesURLNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>GMB Posts</h5>
+							<textarea class="form-control" id="GMBPostsNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Video SEO</h5>
+							<textarea class="form-control" id="VideoSEONotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Robots.txt</h5>
+							<textarea class="form-control" id="RobotstxtNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Sitemap</h5>
+							<textarea class="form-control" id="SitemapNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Page Loading Time</h5>
+							<textarea class="form-control" id="PageLoadingTimeNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Phone Tracking</h5>
+							<textarea class="form-control" id="PhoneTrackingNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>WordPress Updates &amp; Backup</h5>
+							<textarea class="form-control" id="WordPressUpdateNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Updated Plugins</h5>
+							<textarea class="form-control" id="UpdatedPluginsNotes" placeholder="<i>* + This Field + </i>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Additional Work Notes</h5>
+							<textarea class="form-control" id="WorkAdditionalNotes" placeholder="This Field"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="reviewOptions">
+				<form>
+					<h3 class="text-center">ORG Reviews &amp; Options</h3>
+					<div class="row justify-content-md-center">
+						<div class="col-3 ptop">
+							<input class="form-control" id="businessID" placeholder="Enter BirdEye API Business ID Here" value="">
+						</div>
+						<div class="col-7 ptop">
+							<input type="button" class="btn btn-primary" name="getReviews" id="getReviews" value="Get Reviews">
+							<input type="button" class="btn btn-danger" name="clearReviews" id="clearReviews" value="Clear Reviews Cache">
+							<input type="button" class="btn btn-danger" name="clearReviewsNotes" id="clearReviewNotes" value="Clear Notes Cache">
+						</div>
+						<div class="col-2">
+							<div class="form-check">
+								<h5>Note Options</h5>
+								<label class="form-check-label" style="font-weight:normal;">
+									<input id="orgutilization" class="form-check-input" type="checkbox" value="">
+									ORG Utilization
+								</label>
+								<label class="form-check-label" style="font-weight:normal;">
+									<input id="reviewsadditionalnotes" class="form-check-input" type="checkbox" value="">
+									Additional Notes
+								</label>
+							</div>
+						</div>
+					</div>
+					<hr />
+					<div class="row ptop">
+						<div class="col">
+							<h5>ORG Utilization</h5>
+							<textarea class="form-control" id="ORGUtilizationNotes" placeholder="This Field<br />"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Additional Notes</h5>
+							<textarea class="form-control" id="ORGAdditionalNotes" placeholder="This Field<br />"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="performanceOptions">
+				<form>
+					<h3 class="text-center">Performance Notes</h3>
+					<h4 class="text-center ptop">Note Options</h4>
+					<div class="row ptop justify-content-md-center">
+						<div class="col-3 text-center">
+							<div class="form-check">
+								<label class="form-check-label" style="font-weight:normal;">
+									<input id="googlealgorithmchange" class="form-check-input" type="checkbox" value="">
+									Google Algorithm Change
+								</label>
+							</div>
+						</div>
+						<div class="col-3 text-center">
+							<div class="form-check">
+								<label class="form-check-label" style="font-weight:normal;">
+									<input id="trends" class="form-check-input" type="checkbox" value="">
+									Trends
+								</label>
+							</div>
+						</div>
+						<div class="col-3 text-center">
+							<div class="form-check">
+								<label class="form-check-label" style="font-weight:normal;">
+									<input id="performanceadditionalnotes" class="form-check-input" type="checkbox" value="">
+									Additional Notes
+								</label>
+							</div>
+						</div>
+						<div class="col-3 text-center">
+							<div class="form-check">
+								<input type="button" class="btn btn-danger" name="clearPerformanceNotes" id="clearPerformanceNotes" value="Clear Notes Cache">
+							</div>
+						</div>
+					</div>
+					<hr />
+					<div class="row ptop">
+						<div class="col">
+							<h5>Google Algorithm Change</h5>
+							<textarea class="form-control" id="GoogleAlgorithmChangeNotes" placeholder="Google Algorithm Update:<ul><li> + This Field + </li></ul>"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Trends</h5>
+							<textarea class="form-control" id="TrendsNotes" placeholder="Example: Global search volume for dentist related terms decreased by X% in Month. | Output: This Field<br />"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Additional Notes</h5>
+							<textarea class="form-control" id="PerformanceAdditionalNotes" placeholder="This Field<br />"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="ppcOptions">
+				<form>
+					<h3 class="text-center">PPC Notes</h3>
+					<div class="row ptop justify-content-md-center">
+						<div class="col-3 text-center">
+							<div class="form-check">
+								<label class="form-check-label" style="font-weight:normal;">
+									<input id="ppc" class="form-check-input" type="checkbox" value="">
+									PPC Notes
+								</label>
+							</div>
+						</div>
+						<div class="col-3 text-center">
+							<div class="form-check">
+								<input type="button" class="btn btn-danger" name="clearPPCNotes" id="clearPPCNotes" value="Clear Notes Cache">
+							</div>
+						</div>
+					</div>
+					<hr />
+					<div class="row ptop">
+						<div class="col">
+							<h5>PPC Notes</h5>
+							<textarea class="form-control" id="PPCNotes" placeholder="This Field<br />"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="serviceOptions">
+				<form>
+					<h3 class="text-center">Service &amp; Other Notes</h3>
+					<h4 class="text-center ptop">Note Options</h4>
+					<div class="row ptop justify-content-md-center">
+						<div class="col-8">
+							<div class="row">
+								<div class="col-4">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="onlineappointment" class="form-check-input" type="checkbox" value="">
+											Online Appointments
+										</label>
+									</div>
+								</div>
+								<div class="col-2">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="org" class="form-check-input" type="checkbox" value="">
+											ORG
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="healthgrades" class="form-check-input" type="checkbox" value="">
+											Healthgrades
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-4">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="comments" class="form-check-input" type="checkbox" value="">
+											Additional Comments
+										</label>
+									</div>
+								</div>
+								<div class="col-2">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="services" class="form-check-input" type="checkbox" value="">
+											Services
+										</label>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-check">
+										<label class="form-check-label" style="font-weight:normal;">
+											<input id="photorequest" class="form-check-input" type="checkbox" value="">
+											Photo Request
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-4 text-right">
+							<div class="form-check">
+								<input type="button" class="btn btn-danger" name="clearServiceOtherNotes" id="clearServiceOtherNotes" value="Clear Notes Cache">
+							</div>
+						</div>
+					</div>
+					<hr />
+					<div class="row ptop">
+						<div class="col">
+							<h5>Online Appointments</h5>
+							<textarea class="form-control" id="OnlineAppointmentsNotes" placeholder="This Field"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>ORG</h5>
+							<textarea class="form-control" id="ORGNotes" placeholder="This Field"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Healthgrades</h5>
+							<textarea class="form-control" id="HealthgradesNotes" placeholder="This Field"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Services</h5>
+							<textarea class="form-control" id="ServicesNotes" placeholder="This Field"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Photo Request</h5>
+							<textarea class="form-control" id="PhotoRequestNotes" placeholder="This Field"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Additional Comments</h5>
+							<textarea class="form-control" id="CommentsNotes" placeholder="This Field"></textarea>
+						</div>
+					</div>
+					<div class="row ptop">
+						<div class="col">
+							<h5>Contact</h5>
+							<input type="text" class="form-control" id="ContactNotes" placeholder="This Field"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="secondRun">
+					<div class="row">
+						<div class="col text-center">
+							<input type="submit" class="btn btn-primary" name="load" id="load" value="Run Report">
+							<i class="fa fa-question-circle" aria-hidden="true" id="help"></i>
+						</div>
+					</div>
+			</div>
+			<div id="preview"></div>
+			<hr />
+			<div id="code"></div>
+		</div>
+		<footer class="row">
+			<div class="col text-center footer">
+				WEO Media - Dental Marketing | SEO Report Generation Tool by Chris Bonner
+			</div>
+		</footer>
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" ></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+	</body>
+</html>
