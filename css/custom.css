@@ -1,0 +1,133 @@
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* needed for container min-height */
+}
+
+.container {
+    padding-top: 25px;
+    padding-bottom: 50px;
+    min-height: 100%;
+    margin-bottom: -100px;
+}
+
+#divContainer {
+    margin:0 25px 100px 25px;
+}
+
+.hide {
+display:none;
+}
+
+.show {
+display:initial;
+}
+
+label {
+font-weight:bold;
+}
+
+body {
+    background-color:lightblue;
+}
+
+h2 {
+    margin-top: 25px;
+    font-size: 20px;
+}
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+.selectbar {
+    background-color: lightgray;
+    padding: 25px;
+    border-radius: 25px;
+    border: gray 1px solid;
+}
+.ptop {
+    padding-top: 25px;
+}
+.btn {
+    margin-left:25px;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #10317A;
+    border-color: #10317A;
+}
+.btn:disabled {
+	background-color: grey;
+	border-color: grey;
+}
+#help {
+    font-size: 20px;
+    margin-left: 25px;
+}
+#import {
+    background-color: lightgray;
+}
+
+.client {
+    padding-left: 50px;
+}
+
+#clients {
+    margin-left: 0px;
+    width: 100%;
+}
+
+#inputSEO, #inputAdWords, #inputBlog, #debug, #work, #workOptions, #performanceOptions, #ppcOptions, #serviceOptions {
+    display: none;
+}
+input[type=checkbox] {
+    transform: scale(1.2);
+    -ms-transform: scale(1.2); /* IE */
+    -moz-transform: scale(1.2); /* FF */
+    -webkit-transform: scale(1.2); /* Safari and Chrome */
+    -o-transform: scale(1.2); /* Opera */
+}
+#debug input[type=button] {
+    margin-bottom: 30px;
+}
+#inputSEO form, #inputAdWords form, #inputBlog form, .debug, #work form, #workOptions form, #performanceOptions form, #ppcOptions form, #serviceOptions form, #secondRun {
+    border: 1px gray solid;
+    padding: 25px;
+    margin-top: 25px;
+    margin-bottom: 75px;
+    border-radius: 25px;
+    background-color: lightgrey;
+}
+#workOptions form .row .col, #performanceOptions form .row .col, #ppcOptions form .row .col, #serviceOptions form .row .col {
+    display:inline-flex;
+}
+#workOptions form h5, #performanceOptions form h5, #ppcOptions form h5, #serviceOptions form h5 {
+    width:170px;
+    margin-right: 10px;
+}
+.nomar {
+    margin: 0 !important;
+}
+#code {
+    margin-bottom: 75px;
+}
+.center {
+	text-align: center;
+}
+.num {
+    list-style: lower-alpha;
+}
+textarea {
+    min-height: 100px;
+}
+
+footer {
+    height: 100px;
+    background-color: #10317A;
+}
+.footer {
+    color: white;
+    margin: auto;
+}
