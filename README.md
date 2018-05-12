@@ -2,7 +2,7 @@
 
 After a short analysis and discovery period with the SEO team. I was able to identify struggles with efficency due to the lack of software.
 
-Taking the initiative with my free time, I developed a javascript program, which resulted in a 60% decrease in reporting time.
+Taking the initiative with my free time, I developed a javascript program, which resulted in a 60% decrease in time SEO Managers spent creating and processing monthly reports.
 
 The tool lets SEO managers copy and paste data from the companies propriatery system, such as Google Analytics, Google AdWords and Blogging data for assigned clients. Because the companies reporting system sends out the reports via email, I had to be very spicific and careful with wrapping all calculations in HTML.
 
