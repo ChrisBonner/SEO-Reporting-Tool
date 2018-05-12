@@ -6,7 +6,7 @@ Taking the initiative with my free time, I developed a javascript program, which
 
 The tool lets SEO managers copy and paste data from the companies propriatery system, such as Google Analytics, Google AdWords and Blogging data for assigned clients. Because the companies reporting system sends out the reports via email, I had to be very spicific and careful with wrapping all calculations in HTML.
 
-The system is broken into 5 sections. Work performed, Performance Notes, PPC Notes, and Services & other notes.
+The system is broken into 4 sections. Work performed, Performance Notes, PPC Notes, and Services & other notes.
 
 The SEO Manager can enter in what work was performed, easily edit/add educational snippets of information in the Work Performed section. In both the performance notes and PPC notes the SEO manager can update/add notes regarding the website/PPC performance. Finally in the Service & Other notes section, the SEO manager can select/update or add additional notes regarding services offered or additional comments.
 
